@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="stylegiftshop.css">
+  </head>
+  <body>
+    <section id="navigationBar">
+      <nav>
+        <div class="container">
+          <div class="menu-logo">
+            <div class="navbar-brand">
+              <span class="navbar-logo">
+                <a href="index.html">
+                  <img src="Little Elephant.png" alt="logo">
+                </a>
+              </span>
+              <div class="logo-name">
+                <h3 class="section-title">GIFT</h3>
+                <h3 class="section-subtitle">SHOP</h3>
+              </div>
+            </div>
+          </div>
+          <div class="menu-bar">
+            <ul class="menuItems">
+              <li><a href="#">•-:/Home\:-•</a></li>
+              <li><a href="products.html">•-:/Products\:-•</a></li>
+              <li><a href="aboutUs.html">•-:/About Kofi\:-•</a></li>
+              <li><a href="contact.html">•-:/Contact\:-•</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </section>
+    <section id="aboutUs">
+      <div class="container">
+        <div class="row">
+          <div class="col-2">
+            <img src="bear.jpg" alt="banner">
+          </div>
+          <div class="col-2 content">
+            <h1 class="display-1 section-title">About Us</h1>
+            <p class="display-2 section-text">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dui enim, pharetra at auctor vitae.
+            </p>
+            <div>
+              <button class="display-2 button btn-background">Read More</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="productsType">
+      <div class="container">
+        <div class="row">
+          <div class="col-3">
+            <div class="box">
+              <span class="box-icon icon-1">
+                <a href="" class="ico1">T</a>
+              </span>
+              <div class="box-text">
+                <h4 class="display-3">Toys</h4>
+                <p class="display-2">Lorem ipsum dolor</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="box">
+              <span class="box-icon icon-2">
+                <a href="" class="ico1">C</a>
+              </span>
+              <div class="box-text">
+                <h4 class="display-3">Clothing</h4>
+                <p class="display-2">Lorem ipsum dolor</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="box">
+              <span class="box-icon icon-3">
+                <a href="" class="ico1">F</a>
+              </span>
+              <div class="box-text">
+                <h4 class="display-3">Footwear</h4>
+                <p class="display-2">Lorem ipsum dolor</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="new-arrivals">
+      <div class="container">
+        <div class="row">
+          <div class="col-2">
+            <img src="bear (2).jpg" class="new-arrivals-pic"></img>
+          </div>
+          <div class="col-2">
+            <h2 class="section-title display-1">New Arrivals</h2>
+            <p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce accumsan sodales sapien id fermentum. Donec ante feli, ullamcorper eu lacus eu, rhoncus venenatis nunc.</p>
+          <div class="box">
+            <ul>
+              <li>
+                <div class="box-text">
+                  <h4 class="display-3">Cotton Jumpsuit</h4>
+                </div>
+              </li>
+              <li>
+                <div class="box-text">
+                  <h4 class="display-3">Baby Cotton Sweater</h4>
+                </div>
+              </li>
+              <li>
+                <div class="box-text">
+                  <h4 class="display-3">Bamboo Baby Strollers</h4>
+                </div>
+              </li>
+              <li>
+                <div class="box-text">
+                <h4 class="display-3">Wooden Cube Set</h4>
+              </div>
+            </li>
+            </ul>
+          </div>
+          </div>
+        </div>
+      </div>
+    </section> 
+    <section id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="footer-col-1">
+            <div class="navbar-brand">
+              <div class="logo-border">
+                <a href="index.html">
+                  <img src="Little Elephant.png" alt="try using a different browser or use a different computer" class="logo"></img>
+                </a>
+              </div>
+              </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis quisquam hic minima officiis labore. Autem iste maiores</p>
+            <div class="social-media">
+              <div class="social-media-icon">
+                <a href="#">
+                  <img src="facebook-icon.png" alt="haha try using a different browser or use a different computer">
+                </a>
+              </div>
+              <div class="social-media-icon">
+                <a href="#">
+                  <img src="insta-icon.png" alt="haha try using a different browser or use a different computer">
+                </a>
+              </div>
+              <div class="social-media-icon">
+                <a href="#">
+                  <img src="twit-icon.png" alt="haha try using a different browser or use a different computer">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>  	     			
+   </body>
+</html>
+
