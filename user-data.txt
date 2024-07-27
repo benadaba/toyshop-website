@@ -1,6 +1,10 @@
 #!/bin/bash
-sudo apt-get update
-sudo apt-get install -y docker.io
+sudo hostname docker
+sudo hostnamectl set hostname docker
+sudo yum update  -y
+sudo yum install docker  -y
+sudo usermod -aG docker ec2-user
 sudo systemctl start docker
 sudo systemctl enable docker
+sudo su - ec2-user
 sudo docker run -d -p 80:80 --name my-container datapandassandbox/toyshop:gha
