@@ -44,3 +44,29 @@ jobs:
         context: .
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/toyshop:gha
+
+    - name: Create Security Group
+      id: sg
+      run: |
+        SG_ID=$(aws ec2 create-security-group --group-name my-sg --description "My security group" --vpc-id ${{ secrets.AWS_VPC_ID }} --query 'GroupId' --output text)
+        aws ec2 authorize-security-group-ingress --group-id $SG_ID --protocol tcp --port 80 --cidr 0.0.0.0/0
+        echo "::set-output name=sg_id::$SG_ID"
+
+    - name: Launch EC2 Instance
+      id: ec2
+      run: |
+        INSTANCE_ID=$(aws ec2 run-instances --image-id ami-0abcdef1234567890 --count 1 --instance-type t2.micro --key-name my-key-pair --security-group-ids ${{ steps.sg.outputs.sg_id }} --subnet-id ${{ secrets.AWS_SUBNET_ID }} --user-data file://user-data.txt --query 'Instances[0].InstanceId' --output text)
+        echo "::set-output name=instance_id::$INSTANCE_ID"
+
+    - name: Wait for EC2 Instance to be running
+      run: |
+        aws ec2 wait instance-running --instance-ids ${{ steps.ec2.outputs.instance_id }}
+
+    - name: Get EC2 Public IP
+      id: ip
+      run: |
+        PUBLIC_IP=$(aws ec2 describe-instances --instance-ids ${{ steps.ec2.outputs.instance_id }} --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
+        echo "::set-output name=public_ip::$PUBLIC_IP"
+
+    - name: Print Public IP
+      run: echo " ${{ steps.ip.outputs.public_ip }}"
