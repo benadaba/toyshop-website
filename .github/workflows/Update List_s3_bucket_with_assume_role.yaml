@@ -13,24 +13,24 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    #  #assume role to 
-    # - name: Configure AWS credentials
-    #   uses: aws-actions/configure-aws-credentials@v2
-    #   with:
-    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     aws-region: eu-west-2  # Change this to your desired region
-    #     role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/s3_access_for_ec2s
-    #     role-session-name: github-actions-session
-    #     role-duration-seconds: 900
+     #assume role to 
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-2  # Change this to your desired region
+        # role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/s3_access_for_ec2s
+        # role-session-name: github-actions-session
+        # role-duration-seconds: 900
 
-    # - name: List S3 bucket contents
-    #   run: |
-    #     aws s3 ls 
+    - name: List S3 bucket contents
+      run: |
+        aws s3 ls 
 
-    # - name: Create EC2 instance
-    #   run: |
-    #     aws ec2 run-instances --image-id ami-0fe310dde2a8fdc5c --count 1 --instance-type t2.micro --key-name April2024key1 --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=GitHubActionEC2}]'
+    - name: Create EC2 instance
+      run: |
+        aws ec2 run-instances --image-id ami-0fe310dde2a8fdc5c --count 1 --instance-type t2.micro --key-name April2024key1 --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=GitHubActionEC2}]'
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v1
