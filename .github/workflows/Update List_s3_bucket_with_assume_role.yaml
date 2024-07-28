@@ -61,7 +61,7 @@ jobs:
     - name: Launch EC2 Instance
       id: ec2
       run: |
-        INSTANCE_ID=$(aws ec2 run-instances --image-id ami-0fe310dde2a8fdc5c --count 1 --instance-type t2.micro --key-name April2024key1 --security-group-ids ${{ secrets.AWS_SECURITY_GROUP_ID }} --subnet-id ${{ secrets.AWS_SUBNET_ID }} --user-data file://user-data.txt --query 'Instances[0].InstanceId' --output text)
+        INSTANCE_ID=$(aws ec2 run-instances --image-id ami-0fe310dde2a8fdc5c --count 1 --instance-type t2.micro --key-name ${{ secrets.AWS_KEYPAIR_NAME }}   --security-group-ids ${{ secrets.AWS_SECURITY_GROUP_ID }} --subnet-id ${{ secrets.AWS_SUBNET_ID }} --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=GitHubActionEC2-DockerBuild}]' --user-data file://user-data.txt --query 'Instances[0].InstanceId' --output text)
         echo "::set-output name=instance_id::$INSTANCE_ID"
 
     - name: Wait for EC2 Instance to be running
