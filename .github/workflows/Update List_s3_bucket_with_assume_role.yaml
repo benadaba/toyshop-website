@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  list-s3:
+  build-run-docker-image:
     runs-on: ubuntu-latest
 
     steps:
