@@ -4,6 +4,33 @@ on:
   push:
 
   workflow_dispatch:
+    inputs:
+      creake_k8s_cluster:
+        description: 'Choose action: install or delete'
+        required: true
+        default: 'none'
+        type: choice
+        options:
+          - install
+          - delete
+          - both
+          - none
+      build_docker:
+        description: 'Do you want to build a Docker image?'
+        required: true
+        default: 'no'
+        type: choice
+        options:
+          - yes
+          - no
+      launch_ec2:
+        description: 'Do you want to launch an EC2 instance?'
+        required: true
+        default: 'no'
+        type: choice
+        options:
+          - yes
+          - no
 
 jobs:
   build-run-docker-image:
@@ -33,12 +60,14 @@ jobs:
     #     aws ec2 run-instances --image-id ami-0fe310dde2a8fdc5c --count 1 --instance-type t2.micro --key-name April2024key1 --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=GitHubActionEC2}]'
 
     - name: Log in to Docker Hub
+      if: ${{ github.event.inputs.build_docker == 'yes' }}
       uses: docker/login-action@v1
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and push Docker image
+      if: ${{ github.event.inputs.build_docker == 'yes' }}
       uses: docker/build-push-action@v2
       with:
         context: .
@@ -59,22 +88,26 @@ jobs:
     #     echo "::set-output name=instance_id::$INSTANCE_ID".
 
     - name: Launch EC2 Instance
+      if: ${{ github.event.inputs.launch_ec2 == 'yes' }}
       id: ec2
       run: |
         INSTANCE_ID=$(aws ec2 run-instances --image-id ami-0fe310dde2a8fdc5c --count 1 --instance-type t2.micro --key-name ${{ secrets.AWS_KEYPAIR_NAME }}   --security-group-ids ${{ secrets.AWS_SECURITY_GROUP_ID }} --subnet-id ${{ secrets.AWS_SUBNET_ID }} --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=GitHubActionEC2-DockerBuild}]' --user-data file://user-data.txt --query 'Instances[0].InstanceId' --output text)
         echo "::set-output name=instance_id::$INSTANCE_ID"
 
     - name: Wait for EC2 Instance to be running
+      if: ${{ github.event.inputs.launch_ec2 == 'yes' }}
       run: |
         aws ec2 wait instance-running --instance-ids ${{ steps.ec2.outputs.instance_id }}
 
     - name: Get EC2 Public IP
+      if: ${{ github.event.inputs.launch_ec2 == 'yes' }}
       id: ip
       run: |
         PUBLIC_IP=$(aws ec2 describe-instances --instance-ids ${{ steps.ec2.outputs.instance_id }} --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
         echo "::set-output name=public_ip::$PUBLIC_IP"
 
     - name: Print Public IP
+      if: ${{ github.event.inputs.launch_ec2 == 'yes' }}
       run: echo "Public IP address is -  ${{ steps.ip.outputs.public_ip }}"
     
     - name: Set up kubectl
@@ -89,21 +122,30 @@ jobs:
         sudo mv /tmp/eksctl /usr/local/bin/
 
     - name: Add execution permission to the eks-install-file
+      if: ${{ github.event.inputs.creake_k8s_cluster == 'install' || github.event.inputs.creake_k8s_cluster == 'both' }}
       run: chmod +x eks-install.sh
 
     - name: install k8s cluster
+      if: ${{ github.event.inputs.creake_k8s_cluster == 'install' || github.event.inputs.creake_k8s_cluster == 'both' }}
       run: ./eks-install.sh
 
     - name: Wait for EKS Cluster to be ready
+      if: ${{ github.event.inputs.creake_k8s_cluster == 'install' || github.event.inputs.creake_k8s_cluster == 'both' }}
       run: |
         echo "Waiting for EKS cluster to become active..."
-        eksctl utils wait-nodes --cluster=my-cluster --timeout=20m
+        sleep 1200
 
       # Step 7: Verify Cluster is Running
     - name: Verify Kubernetes Cluster Status
+      if: ${{ github.event.inputs.creake_k8s_cluster == 'install' || github.event.inputs.creake_k8s_cluster == 'both' }}
       run: |
         echo "Verifying if the Kubernetes cluster is accessible..."
         kubectl get nodes
+
+    - name: Delete EKS Cluster
+      if: ${{ github.event.inputs.creake_k8s_cluster == 'delete' || github.event.inputs.creake_k8s_cluster == 'both' }}
+      run: |
+        eksctl delete cluster --name ghaCluster --region eu-west-2
 
     
     
