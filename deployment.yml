@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: my-app
-        image: my-app:latest # Use the Docker image you want to deploy
+        image: datapandassandbox/toyshop:gha # Use the Docker image you want to deploy
         ports:
         - containerPort: 80
 
