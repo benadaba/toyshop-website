@@ -163,12 +163,18 @@ jobs:
         eksctl delete cluster --name ghaCluster --region eu-west-2
 
     - name: Deploy App to EKS Cluster
-      if: ${{ github.event.inputs.deploy_app == 'yes' && github.event.inputs.creake_k8s_cluster != 'delete' }}
+      # if: ${{ github.event.inputs.deploy_app == 'yes' && github.event.inputs.creake_k8s_cluster != 'delete' }}
       run: |
         echo "Deploying app to EKS cluster..."
         kubectl apply -f deployment.yaml
         kubectl apply -f service.yaml
         echo "App and LoadBalancer deployed to EKS cluster successfully."
+
+    - name: Get all objects
+      if: ${{ github.event.inputs.deploy_app == 'yes' && github.event.inputs.creake_k8s_cluster != 'delete' }}
+      run: |
+        echo "Get objects in  EKS cluster..."
+        kubectl get all
 
     
     
