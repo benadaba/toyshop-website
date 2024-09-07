@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       creake_k8s_cluster:
-        description: 'Choose action: install or delete'
+        description: 'Choose whether or not provision eks cluster: install or delete'
         required: true
         default: 'none'
         type: choice
@@ -27,6 +27,14 @@ on:
         description: 'Do you want to launch an EC2 instance?'
         required: true
         default: 'no'
+        type: choice
+        options:
+          - yes
+          - no
+      deploy_app:
+        description: 'Do you want to deploy the app to EKS?'
+        required: true
+        default: 'yes'
         type: choice
         options:
           - yes
@@ -142,10 +150,25 @@ jobs:
         echo "Verifying if the Kubernetes cluster is accessible..."
         kubectl get nodes
 
+     # Step 5: Setup Kubeconfig
+    - name: Set up kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
+        export KUBECONFIG=$HOME/.kube/config
+
     - name: Delete EKS Cluster
       if: ${{ github.event.inputs.creake_k8s_cluster == 'delete' || github.event.inputs.creake_k8s_cluster == 'both' }}
       run: |
         eksctl delete cluster --name ghaCluster --region eu-west-2
+
+    - name: Deploy App to EKS Cluster
+      if: ${{ github.event.inputs.deploy_app == 'yes' && github.event.inputs.creake_k8s_cluster != 'delete' }}
+      run: |
+        echo "Deploying app to EKS cluster..."
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
+        echo "App and LoadBalancer deployed to EKS cluster successfully."
 
     
     
