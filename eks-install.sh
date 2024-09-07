@@ -25,16 +25,15 @@ KEY_NAME=datapandas-devops-keypair
 
 # Creation of EKS cluster
 eksctl create cluster \
---name $CLUSTER_NAME \
---version 1.23\
---nodes 2 \
---nodes-min 1 \
---nodes-max 4 \
---node-type t3.micro \
---node-volume-size 8 \
---ssh-access \
---ssh-public-key $KEY_NAME \
---managed
+  --name ghaCluster \
+  --region eu-west-2 \
+  --nodegroup-name standard-workers \
+  --node-type t3.medium \
+  --nodes 3 \
+  --nodes-min 1 \
+  --nodes-max 4 \
+  --ssh-public-key $KEY_NAME \
+  --managed
 
 # if [ $? -eq 0 ]
 # then
