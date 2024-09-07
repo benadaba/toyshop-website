@@ -11,7 +11,7 @@
 # # read -p "Enter NODE_NAME: "  NODE_NAME
 
 
-CLUSTER_NAME=Github-Actions-Cluster
+CLUSTER_NAME=GithubActionsCluster
 REGION=eu-west-2
 NODE_NAME=Linux-nodes
 KEY_NAME=datapandas-devops-keypair
@@ -27,6 +27,7 @@ KEY_NAME=datapandas-devops-keypair
 eksctl create cluster \
 --name $CLUSTER_NAME \
 --version 1.23\
+--region $REGION \
 --nodegroup-name $NODE_NAME \
 --nodes 2 \
 --nodes-min 1 \
