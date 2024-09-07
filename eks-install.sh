@@ -27,7 +27,6 @@ KEY_NAME=datapandas-devops-keypair
 eksctl create cluster \
 --name $CLUSTER_NAME \
 --version 1.23\
---region $REGION \
 --nodegroup-name $NODE_NAME \
 --nodes 2 \
 --nodes-min 1 \
