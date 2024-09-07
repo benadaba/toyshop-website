@@ -76,3 +76,37 @@ jobs:
 
     - name: Print Public IP
       run: echo "Public IP address is -  ${{ steps.ip.outputs.public_ip }}"
+    
+    - name: Set up kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/
+
+    - name: Install eksctl
+      run: |
+        curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+        sudo mv /tmp/eksctl /usr/local/bin/
+
+    - name: Add execution permission to the eks-install-file
+      run: chmod +x eks-install.sh
+
+    - name: install k8s cluster
+      run: ./eks-install.sh
+
+    - name: Wait for EKS Cluster to be ready
+      run: |
+        echo "Waiting for EKS cluster to become active..."
+        eksctl utils wait-nodes --cluster=my-cluster --timeout=20m
+
+      # Step 7: Verify Cluster is Running
+    - name: Verify Kubernetes Cluster Status
+      run: |
+        echo "Verifying if the Kubernetes cluster is accessible..."
+        kubectl get nodes
+
+    
+    
+
+
+    
